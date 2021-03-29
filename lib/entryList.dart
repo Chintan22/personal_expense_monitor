@@ -9,14 +9,14 @@ class EntryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 400,
       child: ListView.builder(
         itemBuilder: (cntx, indx) {
           return Card(
             child: Row(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  margin: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                       border: Border.all(
@@ -24,10 +24,10 @@ class EntryList extends StatelessWidget {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(10)),
-                  child: Text('\$${entries[indx].cost}',
+                  child: Text('\$${entries[indx].cost.toStringAsFixed(2)}',
                       style: TextStyle(
                           color: Colors.green,
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.w700)),
                 ),
                 Column(
