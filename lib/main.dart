@@ -11,9 +11,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Personal Expense Monitor',
       theme: ThemeData(
-          primarySwatch: Colors.cyan,
-          accentColor: Colors.amber,
-          appBarTheme: AppBarTheme(color: Colors.purple)),
+        primarySwatch: Colors.cyan,
+        accentColor: Colors.amber,
+        fontFamily: 'Quicksand',
+        appBarTheme: AppBarTheme(
+            textTheme: ThemeData.light().textTheme.copyWith(
+                title: TextStyle(
+                    fontFamily: 'OpenSans',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold))),
+      ),
       home: MyHomePage(),
     );
   }
@@ -25,12 +32,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Entry> _entries = [
-    Entry(
-        id: 'et1', entryName: 'First Entry', cost: 10.00, date: DateTime.now()),
-    Entry(
-        id: 'et2', entryName: 'Second Entry', cost: 20.20, date: DateTime.now())
-  ];
+  final List<Entry> _entries = [];
 
   void _createNewEntry(String entryName, double cost) {
     final newEt = Entry(
