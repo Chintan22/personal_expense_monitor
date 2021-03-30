@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import './genBars.dart';
 import './entryModel.dart';
 
 class GenChart extends StatelessWidget {
@@ -24,14 +25,21 @@ class GenChart extends StatelessWidget {
     });
   }
 
+  double get totExpense {
+    return weeklyEntryValues.fold(0.0, (previousValue, element) {
+      return previousValue + element['cost'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.all(20),
       elevation: 8,
       child: Row(
         children: weeklyEntryValues.map((index) {
-          return Text('${index['day']}: ${index['cost']}');
+          return GenBar(index['day'], index['cost'],
+              totExpense == 0.0 ? 0.0 : (index['cost'] as double) / totExpense);
         }).toList(),
       ),
     );
