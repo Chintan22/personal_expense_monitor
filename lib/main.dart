@@ -15,12 +15,16 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.cyan,
         accentColor: Colors.amber,
         fontFamily: 'Quicksand',
+        textTheme: ThemeData.light()
+            .textTheme
+            .copyWith(button: TextStyle(color: Colors.white)),
         appBarTheme: AppBarTheme(
             textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
-                    fontFamily: 'OpenSans',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold))),
+                  title: TextStyle(
+                      fontFamily: 'OpenSans',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                )),
       ),
       home: MyHomePage(),
     );
@@ -40,12 +44,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _createNewEntry(String entryName, double cost) {
+  void _createNewEntry(String entryName, double cost, DateTime selDate) {
     final newEt = Entry(
         id: DateTime.now().toString(),
         entryName: entryName,
         cost: cost,
-        date: DateTime.now());
+        date: selDate);
 
     setState(() {
       _entries.add(newEt);
