@@ -22,7 +22,7 @@ class GenChart extends StatelessWidget {
         'day': DateFormat.E().format(weekDay).substring(0, 1),
         'cost': tCost
       };
-    });
+    }).reversed.toList();
   }
 
   double get totExpense {
@@ -35,12 +35,23 @@ class GenChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(20),
-      elevation: 8,
-      child: Row(
-        children: weeklyEntryValues.map((index) {
-          return GenBar(index['day'], index['cost'],
-              totExpense == 0.0 ? 0.0 : (index['cost'] as double) / totExpense);
-        }).toList(),
+      elevation: 5,
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: weeklyEntryValues.map((index) {
+            return Flexible(
+              fit: FlexFit.tight,
+              child: GenBar(
+                  index['day'],
+                  index['cost'],
+                  totExpense == 0.0
+                      ? 0.0
+                      : (index['cost'] as double) / totExpense),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

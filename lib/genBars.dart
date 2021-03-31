@@ -10,13 +10,15 @@ class GenBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text('\$${expCost.toStringAsFixed(0)}'),
+        Container(
+            height: 20,
+            child: FittedBox(child: Text('\$${expCost.toStringAsFixed(0)}'))),
         SizedBox(
           height: 4,
         ),
         Container(
-          height: 10,
-          width: 6,
+          height: 60,
+          width: 10,
           child: Stack(
             children: <Widget>[
               Container(

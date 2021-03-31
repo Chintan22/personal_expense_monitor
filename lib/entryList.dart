@@ -36,45 +36,32 @@ class EntryList extends StatelessWidget {
           : ListView.builder(
               itemBuilder: (cntx, indx) {
                 return Card(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.blue,
-                              width: 3,
-                            ),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Text(
-                            '\$${entries[indx].cost.toStringAsFixed(2)}',
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700)),
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                  elevation: 4,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: FittedBox(
+                          child: Text('\$${entries[indx].cost}',
+                              style: TextStyle(
+                                  color: Colors.indigo,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700)),
+                        ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            entries[indx].entryName,
-                            style: TextStyle(
-                                color: Colors.cyan,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            DateFormat.yMd()
-                                .add_jm()
-                                .format(entries[indx].date),
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.indigo),
-                          )
-                        ],
-                      )
-                    ],
+                    ),
+                    title: Text(
+                      entries[indx].entryName,
+                      style: TextStyle(
+                          color: Colors.cyan,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                        DateFormat.yMd().add_jm().format(entries[indx].date),
+                        style: TextStyle(fontSize: 14, color: Colors.indigo)),
                   ),
                 );
               },
