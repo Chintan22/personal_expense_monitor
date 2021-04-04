@@ -10,21 +10,21 @@ class NewEntry extends StatefulWidget {
 }
 
 class _NewEntryState extends State<NewEntry> {
-  final entryInput = TextEditingController();
-  final costInput = TextEditingController();
-  DateTime _datePicked;
+  final _entryInput = TextEditingController();
+  final _costInput = TextEditingController();
+  DateTime _choosenDate;
 
-  void passEntry() {
-    if (costInput.text.isEmpty) {
+  void _passEntry() {
+    if (_costInput.text.isEmpty) {
       return;
     }
-    final createEntry = entryInput.text;
-    final createCost = double.parse(costInput.text);
-    if (createEntry.isEmpty || createCost <= 0 || _datePicked == null) {
+    final createEntry = _entryInput.text;
+    final createCost = double.parse(_costInput.text);
+    if (createEntry.isEmpty || createCost <= 0 || _choosenDate == null) {
       return;
     }
 
-    widget.passNewEntry(entryInput, costInput, _datePicked);
+    widget.passNewEntry(createEntry, createCost, _choosenDate);
     Navigator.of(context).pop();
   }
 
@@ -34,12 +34,12 @@ class _NewEntryState extends State<NewEntry> {
             initialDate: DateTime.now(),
             firstDate: DateTime(2021),
             lastDate: DateTime.now())
-        .then((selDate) {
-      if (selDate == null) {
+        .then((seltdDate) {
+      if (seltdDate == null) {
         return;
       }
       setState(() {
-        _datePicked == selDate;
+        _choosenDate = seltdDate;
       });
     });
     print('...');
@@ -48,7 +48,7 @@ class _NewEntryState extends State<NewEntry> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 7,
+      elevation: 5,
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -56,23 +56,23 @@ class _NewEntryState extends State<NewEntry> {
           children: <Widget>[
             TextField(
               decoration: InputDecoration(labelText: 'Add Title'),
-              controller: entryInput,
-              onSubmitted: (_) => passEntry(),
+              controller: _entryInput,
+              onSubmitted: (_) => _passEntry(),
             ),
             TextField(
               decoration: InputDecoration(labelText: 'Add Amount'),
-              controller: costInput,
+              controller: _costInput,
               keyboardType: TextInputType.number,
-              onSubmitted: (_) => passEntry(),
+              onSubmitted: (_) => _passEntry(),
             ),
             Container(
-              height: 80,
+              height: 70,
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text(_datePicked == null
+                    child: Text(_choosenDate == null
                         ? 'No Date Selected!'
-                        : 'Selected Date: ${DateFormat.yMd().format(_datePicked)}'),
+                        : 'Selected Date: ${DateFormat.yMd().format(_choosenDate)}'),
                   ),
                   FlatButton(
                     onPressed: _displayDateP,
@@ -86,7 +86,7 @@ class _NewEntryState extends State<NewEntry> {
               ),
             ),
             RaisedButton(
-              onPressed: passEntry,
+              onPressed: _passEntry,
               child: Text('ADD ENTRY'),
               color: Theme.of(context).primaryColor,
               textColor: Theme.of(context).textTheme.button.color,

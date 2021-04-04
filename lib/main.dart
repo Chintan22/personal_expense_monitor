@@ -60,9 +60,18 @@ class _MyHomePageState extends State<MyHomePage> {
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        return GestureDetector(onTap: () {}, child: NewEntry(_createNewEntry));
+        return GestureDetector(
+            onTap: () {},
+            child: NewEntry(_createNewEntry),
+            behavior: HitTestBehavior.opaque);
       },
     );
+  }
+
+  void _deleteEntry(String id) {
+    setState(() {
+      _entries.removeWhere((et) => et.id == id);
+    });
   }
 
   @override
@@ -79,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           GenChart(_addedEntries),
-          EntryList(_entries),
+          EntryList(_entries, _deleteEntry),
         ],
       ),
       floatingActionButton: FloatingActionButton(

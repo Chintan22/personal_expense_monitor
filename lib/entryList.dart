@@ -1,17 +1,16 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import './entryModel.dart';
 import 'package:intl/intl.dart';
 
 class EntryList extends StatelessWidget {
   final List<Entry> entries;
-  EntryList(this.entries);
+  final Function deleteEt;
+  EntryList(this.entries, this.deleteEt);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 400,
       child: entries.isEmpty
           ? Column(
               children: <Widget>[
@@ -23,10 +22,10 @@ class EntryList extends StatelessWidget {
                       fontStyle: FontStyle.italic),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Container(
-                    height: 220,
+                    height: 200,
                     child: Image.asset(
                       'assets/images/addItemIcon.png',
                       fit: BoxFit.cover,
@@ -36,8 +35,8 @@ class EntryList extends StatelessWidget {
           : ListView.builder(
               itemBuilder: (cntx, indx) {
                 return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                  elevation: 4,
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                  elevation: 5,
                   child: ListTile(
                     leading: CircleAvatar(
                       radius: 30,
@@ -60,8 +59,11 @@ class EntryList extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                        DateFormat.yMd().add_jm().format(entries[indx].date),
-                        style: TextStyle(fontSize: 14, color: Colors.indigo)),
+                      DateFormat.yMMMd().format(entries[indx].date),
+                    ),
+                    trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () => deleteEt(entries[indx].id)),
                   ),
                 );
               },

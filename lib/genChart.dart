@@ -10,7 +10,7 @@ class GenChart extends StatelessWidget {
   List<Map<String, Object>> get weeklyEntryValues {
     return List.generate(7, (days) {
       final weekDay = DateTime.now().subtract(Duration(days: days));
-      double tCost = 0.0;
+      var tCost = 0.0;
       for (var i = 0; i < addedEntries.length; i++) {
         if (addedEntries[i].date.day == weekDay.day &&
             addedEntries[i].date.month == weekDay.month &&
@@ -35,7 +35,7 @@ class GenChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(20),
-      elevation: 5,
+      elevation: 6,
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Row(
