@@ -10,25 +10,29 @@ class EntryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return entries.isEmpty
-        ? Column(
-            children: <Widget>[
-              Text(
-                'No entries recorded!',
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 20,
-                    fontStyle: FontStyle.italic),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                  height: 200,
-                  child: Image.asset(
-                    'assets/images/addItemIcon.png',
-                    fit: BoxFit.cover,
-                  ))
-            ],
+        ? LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                children: <Widget>[
+                  Text(
+                    'No entries recorded!',
+                    style: TextStyle(
+                        color: Colors.indigo,
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                      height: constraints.maxHeight * 0.6,
+                      child: Image.asset(
+                        'assets/images/addItemIcon.png',
+                        fit: BoxFit.cover,
+                      ))
+                ],
+              );
+            },
           )
         : ListView.builder(
             itemBuilder: (cntx, indx) {

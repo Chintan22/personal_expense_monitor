@@ -37,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _btnChart = false;
   final List<Entry> _entries = [];
   List<Entry> get _addedEntries {
     return _entries.where((element) {
@@ -58,11 +59,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _btncreateEntry(BuildContext context) {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
-      builder: (_) {
+      builder: (context) {
         return GestureDetector(
             onTap: () {},
-            child: NewEntry(_createNewEntry),
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: NewEntry(_createNewEntry)),
             behavior: HitTestBehavior.opaque);
       },
     );
@@ -76,6 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final chkLandscapre =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text('Personal Expense Monitor'),
       actions: <Widget>[
@@ -83,23 +89,49 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.add), onPressed: () => _btncreateEntry(context))
       ],
     );
+    final etLstWidget = Container(
+        height: (MediaQuery.of(context).size.height -
+                MediaQuery.of(context).padding.top -
+                appBar.preferredSize.height) *
+            0.7,
+        child: EntryList(_entries, _deleteEntry));
+
     return Scaffold(
       appBar: appBar,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-              height: (MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).padding.top -
-                      appBar.preferredSize.height) *
-                  0.3,
-              child: GenChart(_addedEntries)),
-          Container(
-              height: (MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).padding.top -
-                      appBar.preferredSize.height) *
-                  0.7,
-              child: EntryList(_entries, _deleteEntry)),
+          if (chkLandscapre)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Enable Chart'),
+                Switch(
+                    value: _btnChart,
+                    onChanged: (valC) {
+                      setState(() {
+                        _btnChart = valC;
+                      });
+                    })
+              ],
+            ),
+          if (!chkLandscapre)
+            Container(
+                height: (MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top -
+                        appBar.preferredSize.height) *
+                    0.3,
+                child: GenChart(_addedEntries)),
+          if (!chkLandscapre) etLstWidget,
+          if (chkLandscapre)
+            _btnChart
+                ? Container(
+                    height: (MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top -
+                            appBar.preferredSize.height) *
+                        0.6,
+                    child: GenChart(_addedEntries))
+                : etLstWidget,
         ],
       ),
       floatingActionButton: FloatingActionButton(
