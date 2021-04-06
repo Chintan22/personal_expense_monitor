@@ -76,19 +76,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text('Personal Expense Monitor'),
+      actions: <Widget>[
+        IconButton(
+            icon: Icon(Icons.add), onPressed: () => _btncreateEntry(context))
+      ],
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Personal Expense Monitor'),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.add), onPressed: () => _btncreateEntry(context))
-        ],
-      ),
+      appBar: appBar,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          GenChart(_addedEntries),
-          EntryList(_entries, _deleteEntry),
+          Container(
+              height: (MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).padding.top -
+                      appBar.preferredSize.height) *
+                  0.3,
+              child: GenChart(_addedEntries)),
+          Container(
+              height: (MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).padding.top -
+                      appBar.preferredSize.height) *
+                  0.7,
+              child: EntryList(_entries, _deleteEntry)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
