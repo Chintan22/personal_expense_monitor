@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import './entryList.dart';
 import './newEntry.dart';
 import './entryModel.dart';
@@ -63,11 +65,11 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (context) {
         return GestureDetector(
-            onTap: () {},
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: NewEntry(_createNewEntry)),
-            behavior: HitTestBehavior.opaque);
+          onTap: () {},
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: NewEntry(_createNewEntry)),
+        );
       },
     );
   }
@@ -80,65 +82,88 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final chkLandscapre =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final appBar = AppBar(
-      title: Text('Personal Expense Monitor'),
-      actions: <Widget>[
-        IconButton(
-            icon: Icon(Icons.add), onPressed: () => _btncreateEntry(context))
-      ],
-    );
+    final mQuery = MediaQuery.of(context);
+    final chkLandscapre = mQuery.orientation == Orientation.landscape;
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text('Personal Expense Monitor'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                    child: Icon(CupertinoIcons.add),
+                    onTap: () => _btncreateEntry(context)),
+              ],
+            ),
+          )
+        : AppBar(
+            title: Text('Personal Expense Monitor'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () => _btncreateEntry(context))
+            ],
+          );
     final etLstWidget = Container(
-        height: (MediaQuery.of(context).size.height -
-                MediaQuery.of(context).padding.top -
+        height: (mQuery.size.height -
+                mQuery.padding.top -
                 appBar.preferredSize.height) *
             0.7,
         child: EntryList(_entries, _deleteEntry));
+    final bodyScaf = SafeArea(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (chkLandscapre)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Enable Chart'),
+              Switch.adaptive(
+                  activeColor: Theme.of(context).accentColor,
+                  value: _btnChart,
+                  onChanged: (valC) {
+                    setState(() {
+                      _btnChart = valC;
+                    });
+                  })
+            ],
+          ),
+        if (!chkLandscapre)
+          Container(
+              height: (mQuery.size.height -
+                      mQuery.padding.top -
+                      appBar.preferredSize.height) *
+                  0.3,
+              child: GenChart(_addedEntries)),
+        if (!chkLandscapre) etLstWidget,
+        if (chkLandscapre)
+          _btnChart
+              ? Container(
+                  height: (mQuery.size.height -
+                          mQuery.padding.top -
+                          appBar.preferredSize.height) *
+                      0.6,
+                  child: GenChart(_addedEntries))
+              : etLstWidget,
+      ],
+    ));
 
-    return Scaffold(
-      appBar: appBar,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (chkLandscapre)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Enable Chart'),
-                Switch(
-                    value: _btnChart,
-                    onChanged: (valC) {
-                      setState(() {
-                        _btnChart = valC;
-                      });
-                    })
-              ],
-            ),
-          if (!chkLandscapre)
-            Container(
-                height: (MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).padding.top -
-                        appBar.preferredSize.height) *
-                    0.3,
-                child: GenChart(_addedEntries)),
-          if (!chkLandscapre) etLstWidget,
-          if (chkLandscapre)
-            _btnChart
-                ? Container(
-                    height: (MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).padding.top -
-                            appBar.preferredSize.height) *
-                        0.6,
-                    child: GenChart(_addedEntries))
-                : etLstWidget,
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _btncreateEntry(context),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: bodyScaf,
+            navigationBar: appBar,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: bodyScaf,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform.isAndroid
+                ? FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => _btncreateEntry(context),
+                  )
+                : Container());
   }
 }

@@ -63,9 +63,16 @@ class EntryList extends StatelessWidget {
                   subtitle: Text(
                     DateFormat.yMMMd().format(entries[indx].date),
                   ),
-                  trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () => deleteEt(entries[indx].id)),
+                  trailing: MediaQuery.of(context).size.width > 400
+                      ? FlatButton.icon(
+                          onPressed: () => deleteEt(entries[indx].id),
+                          icon: Icon(Icons.delete),
+                          label: Text('Remove'),
+                          textColor: Colors.red,
+                        )
+                      : IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () => deleteEt(entries[indx].id)),
                 ),
               );
             },

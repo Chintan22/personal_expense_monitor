@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import './custom_Button.dart';
 
 class NewEntry extends StatefulWidget {
   final Function passNewEntry;
@@ -80,14 +82,7 @@ class _NewEntryState extends State<NewEntry> {
                           ? 'No Date Selected!'
                           : 'Selected Date: ${DateFormat.yMd().format(_choosenDate)}'),
                     ),
-                    FlatButton(
-                      onPressed: _displayDateP,
-                      child: Text(
-                        'Select Date',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      textColor: Theme.of(context).primaryColor,
-                    )
+                    CustomButton('Select Date', _displayDateP)
                   ],
                 ),
               ),
